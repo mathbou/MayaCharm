@@ -1,5 +1,11 @@
 # MayaReCharm
 
+![badge](https://shieldcn.dev/badge/Made%20with%20AI-red.svg?logo=ri%3ATbBrandGithubCopilot)
+
+[![](https://img.shields.io/badge/Maya-2022+-37A5CC?logo=autodeskmaya&labelColor=FFF)](https://gitlab.com/mathbou/TetrisMaya)
+[![JetBrains Plugin Downloads](https://img.shields.io/jetbrains/plugin/d/31239-mayarecharm?logo=jetbrains&label=Downloads&color=blue)](https://plugins.jetbrains.com/plugin/31239-mayarecharm/)
+[![](https://badgen.net/badge/license/MIT/grey)](https://opensource.org/license/mit)
+
 <!-- Plugin description -->
 Maya integration for PyCharm. MayaReCharm lets you execute the current document or arbitrary code directly in Maya, and
 allows attaching the PyDev debugger to a running Maya instance.
