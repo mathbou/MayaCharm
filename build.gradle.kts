@@ -10,6 +10,7 @@ plugins {
 
 group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
+val platformVersion = providers.gradleProperty("platformVersion").get()
 
 // Set the JVM language level used to build the project.
 kotlin {
@@ -30,8 +31,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        val version = providers.gradleProperty("platformVersion")
-        intellijIdea(version)
+        intellijIdea(platformVersion)
 
         pluginVerifier()
 
@@ -83,7 +83,6 @@ intellijPlatform {
     }
 
     pluginVerification {
-        val platformVersion = providers.gradleProperty("platformVersion").get()
         ides {
             recommended()
             create(IntelliJPlatformType.RustRover, platformVersion)
@@ -111,5 +110,12 @@ tasks {
 
     publishPlugin {
         dependsOn("patchChangelog")
+    }
+}
+
+intellijPlatformTesting {
+    runIde.register("runPycharmFrontend") {
+        type = IntelliJPlatformType.PyCharm
+        version = platformVersion
     }
 }
