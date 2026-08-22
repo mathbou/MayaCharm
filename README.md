@@ -30,24 +30,35 @@ future updates and maintenance.
 
 MayaReCharm requires some minimal setup. The settings panel is located at `Settings | Other Settings | MayaReCharm`.
 
-- **Port Numbers:** Define the port numbers MayaReCharm will use to communicate with your Maya installations.
-- **Maya Interpreters:** Add `mayapy` interpreters to make them available for code execution. 
+Use the ➕ button to add a Maya Sdk.
+MayaReCharm autodetect `mayapy` executables if they're installed at their default location.
+Otherwise, you can set a custom path in `Interpreter path`.
 
 ![MayaReCharm Settings Panel](docs/MayaReCharm3_Settings.png)
 
 > [!WARNING]
 > Adding `mayapy` via the standard `Settings | Python Interpreter` is not supported.
 
-When editing a port number, MayaReCharm displays the code required to open Maya for connections. You can execute this
-code in Maya or add it to your `userSetup.py` file.
+### Edit Maya Sdks
+
+You can edit Maya options using the ✏️ button. 
 
 ![MayaReCharm Settings Panel](docs/MayaReCharm3_EditPort.png)
+
+- **Port Numbers:** Define the port numbers MayaReCharm will use to communicate with your Maya installations.<br>
+  - When editing a port number, MayaReCharm displays the code required to open Maya for connections. You can execute this
+  code in Maya or add it to your `userSetup.py` file.
+- **Maya Stubs:** Python stubs library used for autocompletion. You can choose between:
+  - `No stubs`: Infos fetched by the IDE from maya libs scan. Nearly no autocompletion.      
+  - [maya-stubs](https://github.com/Muream/maya-stubs) by Muream
+  - [types-maya-strict](https://github.com/LumaPictures/cg-stubs) by LumaPictures
+    ![MayaRecharm_StubDemo.gif](docs/MayaRecharm_StubDemo.gif)
 
 ## Usage
 
 Once configured, `mayapy` interpreters are available as Python Interpreter. Select one of them through the bottom-right
-interpreter selector in the IDE so you can enjoy proper syntax highlighting and code completion for Maya's Python API,
-this will also determine to which Maya `Execute Actions` will send the code.
+interpreter selector in the IDE so you can enjoy proper syntax highlighting and code completion for Maya's Python API.
+This also determines to which Maya instance `Execute Actions` will send the code.
 
 ![MayaReCharm_select_interpreter.jpg](docs/MayaReCharm_select_interpreter.png)
 

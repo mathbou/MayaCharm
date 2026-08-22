@@ -12,6 +12,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="settings.ApplicationSettings"/>
+        <postStartupActivity implementation="settings.MayaStubsStartupActivity"/>
         <projectConfigurable instance="settings.MayaSdkConfigurable"/>
 
         <toolWindow id="MayaLog"
