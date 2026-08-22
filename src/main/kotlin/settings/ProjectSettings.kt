@@ -59,9 +59,6 @@ class ProjectSettings(val project: Project) : PersistentStateComponent<ProjectSe
             myState.selectedLogSdk = value
         }
 
-    val selectedSdk: ApplicationSettings.SdkInfo?
-        get() = appSettings.mayaSdkMapping[selectedSdkName]
-
     private fun unpackResources() {
         val pythonCache = pythonCachePath
         pythonCache.delete(true)

@@ -6,7 +6,6 @@ import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.projectRoots.Sdk
 import com.jetbrains.python.PythonHelper
 import com.jetbrains.python.debugger.attach.PyAttachToProcessCommandLineState
 import com.jetbrains.python.run.PythonConfigurationType
@@ -51,4 +50,3 @@ class MayaAttachToProcessCliState(runConfig: PythonRunConfiguration, env: Execut
         return PyAttachToProcessCommandLineState.PyRemoteDebugProcessHandler(handler)
     }
 }
-

@@ -67,12 +67,4 @@ object MayaNotifications {
         )
     }
 
-    fun mayaInstanceNotFound(instancePath: String, project: Project) {
-        Notification(
-            displayGroup,
-            titleText,
-            Loc.message("mayarecharm.notifications.NoRunningMayaInstanceFor", instancePath),
-            NotificationType.ERROR
-        ).notify(project)
-    }
 }

@@ -2,7 +2,6 @@ package debugattach
 
 import com.intellij.execution.process.ProcessInfo
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolder
