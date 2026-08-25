@@ -1,5 +1,16 @@
 # MayaReCharm
 
+## [5.3.0] - 2026-08-25
+### Added
+- Per-Maya-SDK Python stubs selection with `none`, `types-maya-strict`, and `maya-stubs`
+
+### Changed
+- Updated compatibility to PyCharm 2026.2
+- Custom MayaSdk AdditionalData support to bypass internalApi restriction on `PythonSdkAdditionalData`
+
+### Removed
+- MayaReCharm run configuration and related localization entries
+
 ## [5.2.2] - 2026-07-17
 ### Changed
 - Update build configuration for IntelliJ platform compatibility
@@ -155,6 +166,7 @@
 - Better support for multiple Maya installs
 - Removed dependencies on PyCharm Professional's remote debugger as well as PyCharm Professional
 
+[5.3.0]: https://github.com/mathbou/MayaReCharm/releases/tag/v5.3.0
 [5.2.2]: https://github.com/mathbou/MayaReCharm/releases/tag/v5.2.2
 [5.2.1]: https://github.com/mathbou/MayaReCharm/releases/tag/v5.2.1
 [5.2.0]: https://github.com/mathbou/MayaReCharm/releases/tag/v5.2.0
