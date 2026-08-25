@@ -151,15 +151,13 @@ class MayaSdkConfigurable(private val project: Project) : SearchableConfigurable
 
                     val sdk = settings.findByPath(path) ?: continue
                     try {
-                        val library = selectedLibrary
-                        val version = selectedVersion
-                        if (library != null && version != null) {
-                            indicator.text = "$library $version"
-                            val wasDownloaded = PythonStubsManager.isDownloaded(library, version)
-                            PythonStubsManager.ensureDownloaded(library, version)
-                            if (!wasDownloaded) downloadedStubs.add("$library $version")
+                        if (selectedLibrary != null && selectedVersion != null) {
+                            indicator.text = "$selectedLibrary $selectedVersion"
+                            val wasDownloaded = PythonStubsManager.isDownloaded(selectedLibrary, selectedVersion)
+                            PythonStubsManager.ensureDownloaded(selectedLibrary, selectedVersion)
+                            if (!wasDownloaded) downloadedStubs.add("$selectedLibrary $selectedVersion")
                         }
-                        applyStubsToSdk(sdk, library, version)
+                        applyStubsToSdk(sdk, selectedLibrary, selectedVersion)
                     } catch (e: IOException) {
                         notifyStubsFailure(e)
                     } catch (e: IllegalStateException) {
@@ -224,15 +222,15 @@ class MayaSdkConfigurable(private val project: Project) : SearchableConfigurable
         object : Task.Backgroundable(project, Loc.message("mayarecharm.stubs.OperationTitle")) {
             override fun run(indicator: ProgressIndicator) {
                 val downloadedStubs = mutableSetOf<String>()
-                for (sdkInfo in missing) {
-                    val library = sdkInfo.stubsLibrary ?: continue
-                    val version = sdkInfo.stubsVersion ?: continue
+                for ((mayaPyPath, _, stubsLibrary, stubsVersion) in missing) {
+                    val library = stubsLibrary ?: continue
+                    val version = stubsVersion ?: continue
                     try {
                         indicator.text = "$library $version"
                         val wasDownloaded = PythonStubsManager.isDownloaded(library, version)
                         PythonStubsManager.ensureDownloaded(library, version)
-                        val sdk = settings.findByPath(sdkInfo.mayaPyPath)
-                            ?: throw IllegalStateException("Unable to find SDK: ${sdkInfo.mayaPyPath}")
+                        val sdk = settings.findByPath(mayaPyPath)
+                            ?: throw IllegalStateException("Unable to find SDK: $mayaPyPath")
                         applyStubsToSdk(sdk, library, version)
                         if (!wasDownloaded) downloadedStubs.add("$library $version")
                     } catch (e: Exception) {

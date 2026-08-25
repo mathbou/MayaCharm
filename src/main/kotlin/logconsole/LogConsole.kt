@@ -73,7 +73,7 @@ class MayaLogFilterModel(project: Project, tabId: String) : DefaultLogFilterMode
         filters.add(SeverityFilter("Infos", MayaLogSeverity.INFO))
         filters.add(SeverityFilter("Warnings", MayaLogSeverity.WARNING))
         filters.add(SeverityFilter("Errors", MayaLogSeverity.ERROR))
-        filters.addAll(getPreferences().registeredLogFilters)
+        filters.addAll(preferences.registeredLogFilters)
         return filters
     }
 
@@ -130,7 +130,7 @@ class MayaLogFilterModel(project: Project, tabId: String) : DefaultLogFilterMode
         }
 
         override fun toString(): String {
-            return getName()
+            return name
         }
 
         override fun selectFilter() {
@@ -155,7 +155,7 @@ class MayaLogFilterModel(project: Project, tabId: String) : DefaultLogFilterMode
         }
 
         override fun toString(): String {
-            return getName()
+            return name
         }
 
         override fun selectFilter() {
@@ -446,7 +446,7 @@ class LogConsole(
         }
 
         fun rolloverDetected(current: FileSnapshot): Boolean {
-            return current.length < length || !Arrays.equals(firstBytes, current.firstBytes)
+            return current.length < length || !firstBytes.contentEquals(current.firstBytes)
         }
     }
 
