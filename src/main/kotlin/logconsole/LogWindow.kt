@@ -24,7 +24,7 @@ import com.intellij.ui.content.ContentManagerEvent
 import com.intellij.ui.content.ContentManagerListener
 import com.intellij.ui.content.ContentFactory
 import com.intellij.openapi.ui.popup.JBPopupFactory
-import flavors.MayaSdkFlavor
+import flavors.INSTANCE
 import java.io.File
 import java.nio.charset.Charset
 import java.awt.event.MouseEvent
@@ -106,7 +106,7 @@ class LogWindow : ToolWindowFactory, DumbAware {
         select: Boolean
     ): Pair<Content, LogConsole> {
         val port = sdkInfo.port
-        val year = MayaSdkFlavor.getYear(sdkPath) ?: "-"
+        val year = INSTANCE.getYear(sdkPath) ?: "-"
         val console = createConsole(project, port)
         val content = ContentFactory.getInstance().createContent(console.component, "Maya $year ($port)", false)
         content.putUserData(sdkPathKey, sdkPath)
@@ -194,7 +194,7 @@ class LogWindow : ToolWindowFactory, DumbAware {
             val menu = DefaultActionGroup()
             for ((sdkPath, sdkInfo) in missingEntries) {
                 val port = sdkInfo.port
-                val year = MayaSdkFlavor.getYear(sdkPath) ?: "-"
+                val year = INSTANCE.getYear(sdkPath) ?: "-"
                 val label = "Maya $year ($port)"
 
                 menu.add(object : DumbAwareAction(label) {

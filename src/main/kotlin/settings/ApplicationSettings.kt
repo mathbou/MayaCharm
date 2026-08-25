@@ -1,6 +1,5 @@
 package settings
 
-import flavors.MayaSdkFlavor
 import mayacomms.mayaFromMayaPy
 import resources.MayaNotifications
 
@@ -106,7 +105,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings.State> 
     private fun getRegisteredMayaSdkPaths(): List<String> {
         return ProjectJdkTable.getInstance().allJdks
             .mapNotNull { sdk -> sdk.homePath }
-            .filter(MayaSdkFlavor::isValidMayaSdkPath)
+            .filter(flavors.INSTANCE::isValidMayaSdkPath)
             .distinct()
     }
 

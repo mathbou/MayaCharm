@@ -1,7 +1,6 @@
 package settings.ui
 
 import MayaBundle as Loc
-import flavors.MayaSdkFlavor
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.project.Project
@@ -10,16 +9,16 @@ import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.projectRoots.impl.SdkConfigurationUtil
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.util.ui.JBUI
-import com.jetbrains.python.sdk.PythonSdkAdditionalData
 import com.jetbrains.python.sdk.PythonSdkType
-import com.jetbrains.python.sdk.flavors.PyFlavorAndData
-import com.jetbrains.python.sdk.flavors.PyFlavorData
+import flavors.INSTANCE
+import flavors.buildMayaSdkAdditionalData
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
@@ -117,7 +116,7 @@ class MayaSdkAddDialog(private val project: Project) : DialogWrapper(project, fa
             return ValidationInfo(Loc.message("mayarecharm.sdkadd.PathNotFound"), pathField)
         }
 
-        if (!MayaSdkFlavor.isValidMayaSdkPath(path)) {
+        if (!INSTANCE.isValidMayaSdkPath(path)) {
             return ValidationInfo(Loc.message("mayarecharm.sdkadd.NotMayapy"), pathField)
         }
 
@@ -138,10 +137,12 @@ class MayaSdkAddDialog(private val project: Project) : DialogWrapper(project, fa
         val sdkType = PythonSdkType.getInstance()
         val allSdks = ProjectJdkTable.getInstance().allJdks.toList()
 
-        // Preserve Maya flavor identity with the non-deprecated PyFlavorAndData constructor.
-        val additionalData = PythonSdkAdditionalData(
-            PyFlavorAndData(PyFlavorData.Empty, MayaSdkFlavor)
-        )
+        // Note: PythonSdkAdditionalData no longer exposes a stable public, non-internal constructor
+        // that carries a custom PythonSdkFlavor in 2026.2 (all such constructors are either
+        // @ApiStatus.Internal, deprecated-for-removal, or unresolved depending on the exact target
+        // IDE build). See buildMayaSdkAdditionalData() for the reflection-based workaround that keeps
+        // this verifier-clean while preserving Maya's icon/name identity.
+        val additionalData = buildMayaSdkAdditionalData(project.basePath?.let(Path::of))
 
         createdSdk = try {
             val sdk = SdkConfigurationUtil.createSdk(
@@ -149,12 +150,16 @@ class MayaSdkAddDialog(private val project: Project) : DialogWrapper(project, fa
                 path,
                 sdkType,
                 additionalData,
-                MayaSdkFlavor.buildSdkName(path)
+                INSTANCE.buildSdkName(path),
             )
             sdkType.setupSdkPaths(sdk)
             SdkConfigurationUtil.addSdk(sdk)
             sdk
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Messages.showErrorDialog(
+                e.toString(),
+                "SDK Creation Failed"
+            )
             null
         }
 
@@ -174,14 +179,15 @@ class MayaSdkAddDialog(private val project: Project) : DialogWrapper(project, fa
     // ── Private helpers ──────────────────────────────────────────────────
 
     private fun populateDetected() {
-        val detected = MayaSdkFlavor.discoverMayaInstallations()
+        val detected = INSTANCE.discoverMayaInstallations()
 
         // Filter out already-registered SDKs
         val registeredPaths = ProjectJdkTable.getInstance().allJdks
             .mapNotNull { it.homePath?.lowercase() }
             .toSet()
 
-        val available = detected.filter { FileUtil.toSystemIndependentName(it.toString()).lowercase() !in registeredPaths }
+        val available =
+            detected.filter { FileUtil.toSystemIndependentName(it.toString()).lowercase() !in registeredPaths }
 
         if (available.isEmpty()) {
             detectedModel.addElement(DetectedMaya(Loc.message("mayarecharm.sdkadd.NoDetected"), null))
@@ -198,7 +204,7 @@ class MayaSdkAddDialog(private val project: Project) : DialogWrapper(project, fa
      */
     private fun buildMayaLabel(path: Path): String {
         val pathStr = path.toString()
-        val sdkName = MayaSdkFlavor.buildSdkName(pathStr)
+        val sdkName = INSTANCE.buildSdkName(pathStr)
         return "$sdkName - $pathStr"
     }
 
@@ -242,6 +248,3 @@ class MayaSdkAddDialog(private val project: Project) : DialogWrapper(project, fa
         override fun toString(): String = label
     }
 }
-
-
-

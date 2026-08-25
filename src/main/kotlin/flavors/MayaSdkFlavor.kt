@@ -13,7 +13,7 @@ import java.nio.file.Path
 import javax.swing.Icon
 
 
-object MayaSdkFlavor : CPythonSdkFlavor<PyFlavorData.Empty>() {
+class MayaSdkFlavor : CPythonSdkFlavor<PyFlavorData.Empty>() {
     fun getYear(path: String): String? {
         val versionMatch =  Regex("(?i)maya\\s?(\\d{4})").find(path)
 
@@ -27,11 +27,10 @@ object MayaSdkFlavor : CPythonSdkFlavor<PyFlavorData.Empty>() {
 
     fun buildSdkName(path: String): String {
         val year = getYear(path)
-        val pyVersion = getLanguageLevel(path)
         return if (year != null) {
-            "${MayaSdkFlavor.name} $year $pyVersion"
+            "$name $year"
         } else {
-            "${MayaSdkFlavor.name} $pyVersion"
+            name
         }
     }
 
@@ -152,5 +151,7 @@ object MayaSdkFlavor : CPythonSdkFlavor<PyFlavorData.Empty>() {
 }
 
 class MayaFlavorProvider : PythonFlavorProvider {
-    override fun getFlavor(): MayaSdkFlavor = MayaSdkFlavor
+    override fun getFlavor(): MayaSdkFlavor = INSTANCE
 }
+
+val INSTANCE = MayaSdkFlavor()

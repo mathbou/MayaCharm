@@ -26,6 +26,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="Pythonid">
+        <pythonSdkFlavor implementation="flavors.MayaSdkFlavor"/>
         <pythonFlavorProvider implementation="flavors.MayaFlavorProvider" order="first"/>
     </extensions>
 
